@@ -33,9 +33,11 @@ object tfidfStat {
     var tfidfWordSet = new ArrayBuffer[Map[String, Double]](inputFiles.length) // Map[word, TF*IDF-value]
 
     for (i <- 0 to inputFiles.length - 1) {
+      var tfidfOneDoc = Map[String, Double]()
       for (oneWord <- wordSetByFile(i)) {
-        tfidfWordSet.append(Map(oneWord._1 -> TFIDFCalc.tfIdf(oneWord._1, i, wordSetByFile)))
+        tfidfOneDoc += oneWord._1 -> TFIDFCalc.tfIdf(oneWord._1, i, wordSetByFile)
       }
+      tfidfWordSet.append(tfidfOneDoc)
     }
 
     //~~~~~~~~~~ Write to files ~~~~~~~~~~~

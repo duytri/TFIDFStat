@@ -13,6 +13,10 @@ object tfidfStat {
     val outputPath = args(1)
     val inputFiles = (new File(inputPath)).listFiles()
 
+    println("Input path: " + inputPath)
+    println("Output path: " + outputPath)
+    println("Start analyze ...")
+
     //~~~~~~~~~~ Get input files ~~~~~~~~~~
     var wordSetByFile = new ArrayBuffer[Map[String, Int]](inputFiles.length) // Map[word, frequency in document]
     // Foreach text file
@@ -39,6 +43,8 @@ object tfidfStat {
       val outputFile = outputPath + File.separator + inputFiles(i).getName
       write2File(tfidfWordSet(i), outputFile)
     }
+
+    println("Finished!!!")
   }
 
   def addOrIgnore(someWords: ArrayBuffer[String]): Map[String, Int] = {

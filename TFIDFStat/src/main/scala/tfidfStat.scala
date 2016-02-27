@@ -42,7 +42,7 @@ object tfidfStat {
 
     //~~~~~~~~~~ Write to files ~~~~~~~~~~~
     for (i <- 0 to inputFiles.length - 1) {
-      val outputFile = outputPath + File.separator + inputFiles(i).getName
+      val outputFile = outputPath + File.separator +"result.csv"// inputFiles(i).getName
       write2File(tfidfWordSet(i), outputFile)
     }
 
@@ -63,7 +63,7 @@ object tfidfStat {
 
   def write2File(array: Map[String, Double], filePath: String): Unit = {
     val file = new File(filePath)
-    val bw = new BufferedWriter(new FileWriter(file))
+    val bw = new BufferedWriter(new FileWriter(file, true))
     bw.flush()
     array.foreach { x =>
       bw.write(x._1 + ", " + x._2 + "\n")

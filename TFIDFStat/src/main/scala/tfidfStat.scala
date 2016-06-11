@@ -8,13 +8,20 @@ import java.io.BufferedWriter
 import java.io.FileWriter
 
 object tfidfStat {
+  /* Cac tham so cua chuong trinh:
+   * param 0: duong dan den thu muc input va libs (chua file thu vien stopword). CO splash o cuoi.
+   * param 1: duong dan thu muc xuat file ket qua.
+   * param 2: ten thu muc ben trong thu muc input (la 0 hay 1).
+   * */
   def main(args: Array[String]): Unit = {
-    val inputPath = args(0)
+    args.foreach { println }
+    val inputPath = args(0) + "input" + File.separator + args(2)
     val outputPath = args(1)
     val inputFiles = (new File(inputPath)).listFiles()
+    val outputFile = outputPath + File.separator + "result.csv"
 
     println("Input path: " + inputPath)
-    println("Output path: " + outputPath)
+    println("Output path: " + outputFile)
     println("Start analyze ...")
 
     //~~~~~~~~~~ Get input files ~~~~~~~~~~
@@ -29,6 +36,14 @@ object tfidfStat {
       wordSetByFile.append(addOrIgnore(wordsTmpArr))
     }
 
+    var arrStopwords = new ArrayBuffer[String]
+    val stopwordFilePath = args(0) + "libs/vietnamese-stopwords.txt"
+    val swSource = Source.fromFile(stopwordFilePath)
+    swSource.getLines.foreach { x => arrStopwords.append(x) }
+    swSource.close
+
+    wordSetByFile.foreach(oneSet => oneSet --= arrStopwords)
+
     //~~~~~~~~~~ Calculate TFIDF ~~~~~~~~~~
     var tfidfWordSet = new ArrayBuffer[Map[String, Double]](inputFiles.length) // Map[word, TF*IDF-value]
 
@@ -42,7 +57,6 @@ object tfidfStat {
 
     //~~~~~~~~~~ Write to files ~~~~~~~~~~~
     for (i <- 0 to inputFiles.length - 1) {
-      val outputFile = outputPath + File.separator +"result.csv"// inputFiles(i).getName
       write2File(tfidfWordSet(i), outputFile)
     }
 

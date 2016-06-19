@@ -12,8 +12,8 @@ object TFIDFCalc {
 
   def idf(term: String, allDocs: ArrayBuffer[Map[String, Int]]): Double = {
     var n = 0d
-    allDocs.foreach(x => {
-      if (x.contains(term)) n += 1
+    allDocs.foreach(doc => {
+      if (doc.contains(term)) n += 1
     })
 
     return Math.log10(allDocs.length / n)

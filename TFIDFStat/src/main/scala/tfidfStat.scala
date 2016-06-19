@@ -50,6 +50,21 @@ object tfidfStat {
     for (i <- 0 to inputFiles.length - 1) {
       var tfidfOneDoc = Map[String, Double]()
       for (oneWord <- wordSetByFile(i)) {
+        if (oneWord._1.equals("theverge")) {
+          var wordCount = 0d
+          wordSetByFile(i).foreach((x => wordCount += x._2))
+          println("Freq = " + oneWord._2 + " WordNo. = " + wordCount + " TF = " + oneWord._2 / wordCount)
+
+          var n = 0d
+          wordSetByFile.foreach(doc => {
+            if (doc.contains(oneWord._1)) n += 1
+          })
+
+          println("DocNo. = " + wordSetByFile.length + " DocContainsNo. = " + n + " IDF = " + Math.log10(wordSetByFile.length / n))
+
+          wordSetByFile(i).foreach(x => println(x._1 + " ++++ " + x._2))
+
+        }
         tfidfOneDoc += oneWord._1 -> TFIDFCalc.tfIdf(oneWord._1, i, wordSetByFile)
       }
       tfidfWordSet.append(tfidfOneDoc)
@@ -80,7 +95,7 @@ object tfidfStat {
     val bw = new BufferedWriter(new FileWriter(file, true))
     bw.flush()
     array.foreach { x =>
-      bw.write(x._1 + ", " + x._2 + "\n")
+      bw.write(x._1 + ";" + x._2 + "\n")
     }
     bw.close()
   }
